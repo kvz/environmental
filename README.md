@@ -2,7 +2,7 @@ Many people think shipping config json files is an upgrade over environment vari
 
 Don't let your app load its config.
 
-![ruse](https://cloud.githubusercontent.com/assets/26752/2876431/c36febd8-d435-11e3-9159-26436bda3587.png)
+![It's a trap](http://gifatron.com/wp-content/uploads/2013/02/its_a_trap.gif)
 
 ..Inject it instead.
 
