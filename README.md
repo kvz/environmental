@@ -186,7 +186,7 @@ done
 
 When you deploy your app into production and you run the servers yourself, you might want to use upstart to respawn your process after crashes.
 
-Here's how an upstart file (`/etc/init/myapp`) could look like, where the root user injects the environment keys into process memory of an unpriviliged user.
+Here's how an [upstart](http://upstart.ubuntu.com/) file (`/etc/init/myapp`) could look like, where the root user injects the environment keys into process memory of an unpriviliged user.
 
 This has the big security advantage that you own program cannot even read its credentials from disk.
 
@@ -194,30 +194,19 @@ This has the big security advantage that you own program cannot even read its cr
 stop on runlevel [016]
 start on (started networking)
 
-# The respawn limits function as follows: If the process is respawned
-# more than count times within an interval of timeout seconds,
-# the process will be stopped automatically, and not restarted.
-# Unless set explicitly, the limit defaults to 10 times within 5 seconds.
-# http://upstart.ubuntu.com/wiki/Stanzas#respawn_limit
 respawn
 respawn limit 10 5
 
 limit nofile 32768 32768
 
-pre-stop exec status ${MYAPP_UNIXNAME} | grep -q "stop/waiting" && initctl emit --no-wait stopped JOB=${MYAPP_UNIXNAME} || true
+pre-stop exec status myapp | grep -q "stop/waiting" && initctl emit --no-wait stopped JOB=myapp || true
 
 script
-  set -e
-  set -x
-  mkfifo /tmp/${MYAPP_UNIXNAME}-log-fifo
-  ( logger -t ${MYAPP_UNIXNAME} </tmp/${MYAPP_UNIXNAME}-log-fifo & )
-  exec >/tmp/${MYAPP_UNIXNAME}-log-fifo
-  rm /tmp/${MYAPP_UNIXNAME}-log-fifo
-  exec bash -c "cd ${MYAPP_DIR} \
-    && chown root.root envs/*.sh \
+  exec bash -c "cd /srv/myapp/current \
+    && chown root envs/*.sh \
     && chmod 600 envs/*.sh \
-    && source envs/${MYAPP_DEPLOY_ENV}.sh \
-    && exec sudo -EHu ${MYAPP_SERVICE_USER} make start 2>&1"
+    && source envs/production.sh \
+    && exec sudo -EHu www-data make start 2>&1"
 end script
 ```
 
