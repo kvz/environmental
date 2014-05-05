@@ -26,7 +26,7 @@ Environmental Doesn't
 
 Environmental Does
 
- - Impose **one way*** of dealing with environment variables
+ - Impose **one way** of dealing with environment variables
  - Make vars available in nested format inside your app (e.g. `MYAPP_REDIS_HOST`) becomes `config.redis.host`
  - Play well with unix
  - Interpret multiple inherited bash environment files in an isolated environment to capture them, and prepare them for exporting to [Nodejitsu](https://www.nodejitsu.com/documentation/jitsu/env/) or [Heroku](https://devcenter.heroku.com/articles/config-vars).
