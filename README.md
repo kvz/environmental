@@ -1,6 +1,6 @@
-Many people think shipping config json files is an upgrade over environment variables. It's not.
+Some people think shipping json / yml / xml config files is an upgrade over archaic environment variables. It's not.
 
-Don't let your app load its config.
+> Don't let your app load its config
 
 ![687474703a2f2f6769666174726f6e2e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031332f30322f6974735f615f747261702e676966](https://cloud.githubusercontent.com/assets/26752/2877380/764960a4-d44a-11e3-8ac4-afd5f1678bb2.gif)
 
@@ -8,12 +8,12 @@ Don't let your app load its config.
 
 Unix environment vars are ideal for configuration and I have yet to encounter an application that woudn't be better off with them.
 
-- You can change a value at near-runtime: `DEBUG=*.* node run.js`
-- You can inject environment variables into a process belonging to a non-privileged user: `source envs/production.sh && sudo -EHu www-data node run.js`
-- You can inherit, inside `staging.sh`, just source `production.sh`, inside `kevin.sh` source `development.sh`
+- You can override a value at near-runtime without having to change/backup config files: `DEBUG=*.* node run.js`
+- You can inject environment variables into the memory of a process belonging to a non-privileged user: `source envs/production.sh && sudo -EHu www-data node run.js` without having to run / write any software for it.
+- You can inherit, inside `staging.sh`, just `source production.sh`, inside `kevin.sh` `source development.sh`
 - Your operating system is aware and provides tools for inspection, debugging, optionally passing onto other processes, etc.
-- You can re-use config in supporting BASH scripts
-- You can use config in the terminal yourself. E.g. `cd ${MYAPP_DIR}`
+- You can directly use config across languages, e.g. in supporting BASH scripts
+- You can directly use the config in a terminal yourself, e.g. `cd ${MYAPP_DIR}`
 
 And as with any other type of config:
 
