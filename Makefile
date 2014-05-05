@@ -18,6 +18,11 @@ lint:
 build: lint
 	$(COFFEE) $(CSOPTS) -c -o lib src/environmental.coffee
 
+release: build
+	npm version patch -m "Upgrade to %s for reasons"
+	git push
+	npm publish
+
 compile:
 	@echo "Compiling files"
 	time make build
