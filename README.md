@@ -4,13 +4,12 @@ Don't let your app load its config.
 
 ![687474703a2f2f6769666174726f6e2e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031332f30322f6974735f615f747261702e676966](https://cloud.githubusercontent.com/assets/26752/2877380/764960a4-d44a-11e3-8ac4-afd5f1678bb2.gif)
 
-
-..inject it instead.
+... inject it instead.
 
 Unix environment vars are ideal for configuration and I have yet to encounter an application that woudn't be better off with them.
 
 - You can change a value at near-runtime: `DEBUG=*.* node run.js`
-- You can inject environment variables into a process belonging to a non-priviliged user: `source envs/production.sh && exec sudo -EHu www-data node run.js`
+- You can inject environment variables into a process belonging to a non-privileged user: `source envs/production.sh && exec sudo -EHu www-data node run.js`
 - You can inherit, inside `staging.sh`, just source `production.sh`, inside `kevin.sh` source `development.sh`
 - Your operating system is aware and provides tools for inspection, debugging, optionally passing onto other processes, etc.
 
@@ -18,7 +17,7 @@ And as with any other type of config:
 
 - You can save them into files and keep them out of version control
 
-One downside fo environment variables, is there is little convention and syntactic sugar in the high-level languages. This module attempts to change that.
+One downside of environment variables is that there is little convention and syntactic sugar in the high-level languages. This module attempts to change that.
 
 Environmental Doesn't
 
@@ -72,7 +71,7 @@ export MYSQL_HOST="127.0.0.1"
 export MYSQL_URL="mysql://user:pass@${MYSQL_HOST}/dbname"
 ```
 
-Then when you extend this and only override `MYSQL_HOST`, obviously the `MYSQL_URL` will remain unaware of your host change. Ergo: duplication of vars might be the lesser evil then going out of your way to DRY things up.
+Then when you extend this and only override `MYSQL_HOST`, obviously the `MYSQL_URL` will remain unaware of your host change. Ergo: duplication of vars might be the lesser evil than going out of your way to DRY things up.
 
 ### Mandatory and unprefixed variables
 
@@ -82,7 +81,7 @@ These variables are mandatory and have special meaning:
 export NODE_APP_PREFIX="MYAPP" # filter and nest vars starting with MYAPP right into your app
 export NODE_ENV="production"   # the environment your program thinks it's running
 export DEPLOY_ENV="staging"    # the machine you are actually running on
-export DEBUG=*.*               # Used to control debug levels per module
+export DEBUG=*.*               # used to control debug levels per module
 ```
 
 After getting that out of the way, feel free to start hacking, prefixing all
@@ -121,7 +120,7 @@ Start your app in any of these ways:
 source envs/development.sh && node myapp.js
 ```
 
-Inside your source you can obviously just access `process.env.TLS_REDIS_HOST`, but Environmental also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
+Inside your source you can obviously just access `process.env.TLS_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
 
 ```javascript
 var Environmental = require ('environmental');
@@ -144,7 +143,7 @@ As you see
 
 Nodejitsu als works with environment variables. But since they are hard to ship, they want you to bundle them in a json file.
 
-Environmental can create such a temporary json file for you. In this example it figures out all vars from `envs/production.sh` (even if it inherits from other files:
+Environmental can create such a temporary json file for you. In this example it figures out all vars from `envs/production.sh` (even if it inherits from other files):
 
 ```bash
 $ ./node_modules/.bin/environmental envs/production.sh
@@ -157,3 +156,11 @@ $ rm /tmp/jitsu-env.json
 
 ## Exporting to Heroku
 
+@TODO
+
+## Todo
+
+ - Better (more compact, more consise) API language
+ - Offer assistance (either code or documentation) for syncing config without Git
+ - More tests
+ - Integrate with Heroku as an export target
