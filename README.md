@@ -9,7 +9,7 @@ Don't let your app load its config.
 Unix environment vars are ideal for configuration and I have yet to encounter an application that woudn't be better off with them.
 
 - You can change a value at near-runtime: `DEBUG=*.* node run.js`
-- You can inject environment variables into a process belonging to a non-privileged user: `source envs/production.sh && exec sudo -EHu www-data node run.js`
+- You can inject environment variables into a process belonging to a non-privileged user: `source envs/production.sh && sudo -EHu www-data node run.js`
 - You can inherit, inside `staging.sh`, just source `production.sh`, inside `kevin.sh` source `development.sh`
 - Your operating system is aware and provides tools for inspection, debugging, optionally passing onto other processes, etc.
 
@@ -120,7 +120,7 @@ Start your app in any of these ways:
 source envs/development.sh && node myapp.js
 ```
 
-Inside your source you can obviously just access `process.env.TLS_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
+Inside your source you can obviously just access `process.env.MYAPP_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
 
 ```javascript
 var Environmental = require ('environmental');
@@ -158,9 +158,85 @@ $ rm /tmp/jitsu-env.json
 
 @TODO
 
+## Exporting to your own server
+
+You could use rsync for this. For instance, here we use a `Makefile` to sync config to the staging machines:
+
+```bash
+
+config-pull:
+    @echo "--> If you haven't already, please make a envs/staging.sh and with MYAPP_SSH_* vars for staging"
+    @source envs/staging.sh; \
+      for sshHost in `echo $${MYAPP_SSH_HOSTS}`; do \
+        rsync \
+         --recursive \
+         --links \
+         --perms \
+         --times \
+         --devices \
+         --specials \
+         --progress \
+         --rsh="$${MYAPP_SSH_OPT}" $${sshHost}:$${MYAPP_DIR}/envs/ ./envs; \
+        break; \
+      done
+
+config-push:
+    @source envs/staging.sh; \
+      for sshHost in `echo $${MYAPP_SSH_HOSTS}`; do \
+        rsync \
+         --recursive \
+         --links \
+         --perms \
+         --times \
+         --devices \
+         --specials \
+         --progress \
+         --rsh="$${MYAPP_SSH_OPT}" ./envs/ $${sshHost}:$${MYAPP_DIR}/envs; \
+      done
+```
+
+## Injecting into a non-privileged user process
+
+When you deploy your app into production and you run the servers yourself, you might want to use upstart to respawn your process after crashes.
+
+Here's how an upstart file (`/etc/init/myapp`) could look like, where the root user injects the environment keys into process memory of an unpriviliged user.
+
+This has the big security advantage that you own program cannot even read its credentials from disk.
+
+```bash
+stop on runlevel [016]
+start on (started networking)
+
+# The respawn limits function as follows: If the process is respawned
+# more than count times within an interval of timeout seconds,
+# the process will be stopped automatically, and not restarted.
+# Unless set explicitly, the limit defaults to 10 times within 5 seconds.
+# http://upstart.ubuntu.com/wiki/Stanzas#respawn_limit
+respawn
+respawn limit 10 5
+
+limit nofile 32768 32768
+
+pre-stop exec status ${MYAPP_UNIXNAME} | grep -q "stop/waiting" && initctl emit --no-wait stopped JOB=${MYAPP_UNIXNAME} || true
+
+script
+  set -e
+  set -x
+  mkfifo /tmp/${MYAPP_UNIXNAME}-log-fifo
+  ( logger -t ${MYAPP_UNIXNAME} </tmp/${MYAPP_UNIXNAME}-log-fifo & )
+  exec >/tmp/${MYAPP_UNIXNAME}-log-fifo
+  rm /tmp/${MYAPP_UNIXNAME}-log-fifo
+  exec bash -c "cd ${MYAPP_DIR} \
+    && chown root.root envs/*.sh \
+    && chmod 600 envs/*.sh \
+    && source envs/${MYAPP_DEPLOY_ENV}.sh \
+    && exec sudo -EHu ${MYAPP_SERVICE_USER} make start 2>&1"
+end script
+```
+
 ## Todo
 
  - Better (more compact, more consise) API language
- - Offer assistance (either code or documentation) for syncing config without Git
+ - Offer better ideas / docs for syncing config without Git
  - More tests
  - Integrate with Heroku as an export target
