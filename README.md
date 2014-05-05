@@ -119,11 +119,27 @@ Having env files in Git can be convenient as you're still protoyping, but once y
 Start your app in any of these ways:
 
 ```bash
-source envs/development.sh && node myapp.js
+source envs/development.sh
+node myapp.js
+```
+
+```bash
+source envs/production.sh
+DEBUG=*.* node myapp.js
+```
+
+```bash
+source envs/staging.sh
+# Following seems weird, but sudo will not preserve $PATH, regardless of -E
+sudo -EHu www-data env PATH=${PATH} node myapp.js
 ```
 
 ```bash
 source envs/development.sh && node myapp.js
+```
+
+```bash
+start myapp # see upstart example below
 ```
 
 Inside your app you can now obviously already just access `process.env.MYAPP_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
