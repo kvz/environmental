@@ -1,12 +1,12 @@
 Many people think shipping config json files is an upgrade over environment variables. It's not.
 
-Dont't let your app load its config.
+Don't let your app load its config.
 
 ![ruse](https://cloud.githubusercontent.com/assets/26752/2876431/c36febd8-d435-11e3-9159-26436bda3587.png)
 
 ..Inject it instead.
 
-Unix environment vars are ideal for configration and I have yet to encounter an application that woudn't be better off with them.
+Unix environment vars are ideal for configuration and I have yet to encounter an application that woudn't be better off with them.
 
 - You can change a value at near-runtime: `DEBUG=*.* node run.js`
 - You can inject environment variables into a process belonging to a non-priviliged user: `source envs/production.sh && exec sudo -EHu www-data node run.js`
