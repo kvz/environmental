@@ -4,7 +4,7 @@ Don't let your app load its config.
 
 ![It's a trap](http://gifatron.com/wp-content/uploads/2013/02/its_a_trap.gif)
 
-..Inject it instead.
+..inject it instead.
 
 Unix environment vars are ideal for configuration and I have yet to encounter an application that woudn't be better off with them.
 
