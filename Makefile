@@ -19,7 +19,7 @@ build: lint
 	$(COFFEE) $(CSOPTS) -c -o lib src/environmental.coffee
 
 release: build test
-	npm version patch -m "Upgrade to %s for reasons"
+	npm version patch -m "Upgrade to %s"
 	git push
 	npm publish
 
