@@ -12,19 +12,21 @@ Unix environment vars are ideal for configuration and I have yet to encounter an
 - You can inject environment variables into a process belonging to a non-privileged user: `source envs/production.sh && sudo -EHu www-data node run.js`
 - You can inherit, inside `staging.sh`, just source `production.sh`, inside `kevin.sh` source `development.sh`
 - Your operating system is aware and provides tools for inspection, debugging, optionally passing onto other processes, etc.
+- You can re-use config in supporting BASH scripts
+- You can use config in the terminal yourself. E.g. `cd ${MYAPP_DIR}`
 
 And as with any other type of config:
 
-- You can save them into files and keep them out of version control
+- You can group/save them into files and keep them out of version control
 
 One downside of environment variables is that there is little convention and syntactic sugar in the high-level languages. This module attempts to change that.
 
-Environmental Doesn't
+Environmental doesn't:
 
  - Break [12-factor](http://12factor.net/)
  - Get in your way
 
-Environmental Does
+Environmental does:
 
  - Impose **one way** of dealing with environment variables
  - Make vars available in nested format inside your app (e.g. `MYAPP_REDIS_HOST`) becomes `config.redis.host`
@@ -120,7 +122,11 @@ Start your app in any of these ways:
 source envs/development.sh && node myapp.js
 ```
 
-Inside your source you can obviously just access `process.env.MYAPP_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
+```bash
+source envs/development.sh && node myapp.js
+```
+
+Inside your app you can now obviously already just access `process.env.MYAPP_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
 
 ```javascript
 var Environmental = require ('environmental');
@@ -158,41 +164,22 @@ $ rm /tmp/jitsu-env.json
 
 @TODO
 
-## Exporting to your own server
+## Exporting to your own servers
 
-You could use rsync for this. For instance, here we use a `Makefile` to sync config to the staging machines:
+You could use rsync for this. For instance:
 
 ```bash
-
-config-pull:
-    @echo "--> If you haven't already, please make a envs/staging.sh and with MYAPP_SSH_* vars for staging"
-    @source envs/staging.sh; \
-      for sshHost in `echo $${MYAPP_SSH_HOSTS}`; do \
-        rsync \
-         --recursive \
-         --links \
-         --perms \
-         --times \
-         --devices \
-         --specials \
-         --progress \
-         --rsh="$${MYAPP_SSH_OPT}" $${sshHost}:$${MYAPP_DIR}/envs/ ./envs; \
-        break; \
-      done
-
-config-push:
-    @source envs/staging.sh; \
-      for sshHost in `echo $${MYAPP_SSH_HOSTS}`; do \
-        rsync \
-         --recursive \
-         --links \
-         --perms \
-         --times \
-         --devices \
-         --specials \
-         --progress \
-         --rsh="$${MYAPP_SSH_OPT}" ./envs/ $${sshHost}:$${MYAPP_DIR}/envs; \
-      done
+for host in `echo ${MYAPP_SSH_HOSTS}`; do
+  rsync \
+   --recursive \
+   --links \
+   --perms \
+   --times \
+   --devices \
+   --specials \
+   --progress \
+  ./envs/ ${host}:${MYAPP_DIR}/envs
+done
 ```
 
 ## Injecting into a non-privileged user process
@@ -236,7 +223,8 @@ end script
 
 ## Todo
 
- - Better (more compact, more consise) API language
- - Offer better ideas / docs for syncing config without Git
- - More tests
- - Integrate with Heroku as an export target
+ - [ ] Better (more compact, more consise) API language
+ - [ ] Offer better ideas / docs for syncing config without Git
+ - [ ] A means of requiring vars for particular environments, and failing hard/early
+ - [ ] More tests
+ - [ ] Integrate with Heroku as an export target

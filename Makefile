@@ -1,7 +1,6 @@
-# TODO: fix makefile to correspond the real situation
-# (e.g. remove outdated targets and macros)
+SHELL := /bin/bash
 
-.PHONY: js test
+.PHONY: test lint build release compile watch
 
 COFFEE     = node_modules/.bin/coffee
 COFFEELINT = node_modules/.bin/coffeelint
