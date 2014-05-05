@@ -145,7 +145,7 @@ start myapp # see upstart example below
 Inside your app you can now obviously already just access `process.env.MYAPP_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
 
 ```javascript
-var Environmental = require ('environmental');
+var Environmental = require('environmental');
 var environmental = new Environmental();
 var config        = environmental.nested(process.env, process.env.NODE_APP_PREFIX);
 
@@ -168,12 +168,12 @@ Nodejitsu als works with environment variables. But since they are hard to ship,
 Environmental can create such a temporary json file for you. In this example it figures out all vars from `envs/production.sh` (even if it inherits from other files):
 
 ```bash
-$ ./node_modules/.bin/environmental envs/production.sh
+./node_modules/.bin/environmental envs/production.sh
 {"MYAPP_REDIS_PORT":"6379","NODE_APP_PREFIX":"MYAPP","MYAPP_REDIS_PASS":"","DEPLOY_ENV":"production","SUBDOMAIN":"mycompany-myapp","NODE_ENV":"production","MYAPP_REDIS_HOST":"127.0.0.1","DEBUG":""}
-$ ./node_modules/.bin/environmental envs/production.sh > /tmp/jitsu-env.json
-$ jitsu --confirm env load /tmp/jitsu-env.json
-$ jitsu --confirm deploy
-$ rm /tmp/jitsu-env.json
+./node_modules/.bin/environmental envs/production.sh > /tmp/jitsu-env.json
+jitsu --confirm env load /tmp/jitsu-env.json
+jitsu --confirm deploy
+rm /tmp/jitsu-env.json
 ```
 
 ## Exporting to Heroku
