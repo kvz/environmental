@@ -1,14 +1,9 @@
 SHELL := /bin/bash
 
-.PHONY: test lint build release compile watch
-
 COFFEE     = node_modules/.bin/coffee
 COFFEELINT = node_modules/.bin/coffeelint
 MOCHA      = node_modules/.bin/mocha --compilers coffee:coffee-script --require "coffee-script/register"
 REPORTER   = nyan
-
-test:
-	$(MOCHA) --reporter $(REPORTER) test/
 
 lint:
 	@[ ! -f coffeelint.json ] && $(COFFEELINT) --makeconfig > coffeelint.json || true
@@ -16,6 +11,16 @@ lint:
 
 build: lint
 	$(COFFEE) $(CSOPTS) -c -o lib src/environmental.coffee
+
+test: build
+	$(MOCHA) --reporter $(REPORTER) test/
+
+compile:
+	@echo "Compiling files"
+	time make build
+
+watch:
+	watch -n 2 make -s compile
 
 release-major: build test
 	npm version major -m "Upgrade to %s"
@@ -32,9 +37,4 @@ release-patch: build test
 	git push
 	npm publish
 
-compile:
-	@echo "Compiling files"
-	time make build
-
-watch:
-	watch -n 2 make -s compile
+.PHONY: test lint build release compile watch

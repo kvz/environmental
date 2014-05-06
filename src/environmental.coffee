@@ -4,14 +4,17 @@ exec      = require("child_process").exec
 unflatten = require('flat').unflatten
 
 class Environmental
-  constructor: (@ignore) ->
-    @ignore ?= [
+  constructor: (@config) ->
+    @config.ignore ?= [
       "PWD"
       "SHLVL"
       "_"
     ]
 
-  nested: (flat, filter) ->
+  @config: (flat, filter) ->
+    flat   ?= process.env
+    filter ?= process.env.NODE_APP_PREFIX
+
     lowerEnv = {}
     for key, val of flat
       lowerEnv[key.toLowerCase()] = val
@@ -38,7 +41,7 @@ class Environmental
         parts = item.split("=")
         key   = parts.shift()
         val   = parts.join("=")
-        continue  if @ignore.indexOf(key) isnt -1 or not key
+        continue  if @config.ignore.indexOf(key) isnt -1 or not key
         flat[key] = val
 
       cb null, flat

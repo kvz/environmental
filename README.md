@@ -145,10 +145,7 @@ start myapp # see upstart example below
 Inside your app you can now obviously already just access `process.env.MYAPP_REDIS_HOST`, but **Environmental** also provides some syntactic sugar so you could type `config.redis.host` instead. Here's how:
 
 ```javascript
-var Environmental = require('environmental');
-var environmental = new Environmental();
-var config        = environmental.nested(process.env, process.env.NODE_APP_PREFIX);
-
+var config = require('environmental').config();
 console.log(config);
 
 // This will return
@@ -168,9 +165,7 @@ Nodejitsu als works with environment variables. But since they are hard to ship,
 Environmental can create such a temporary json file for you. In this example it figures out all vars from `envs/production.sh` (even if it inherits from other files):
 
 ```bash
-./node_modules/.bin/environmental envs/production.sh
-{"MYAPP_REDIS_PORT":"6379","NODE_APP_PREFIX":"MYAPP","MYAPP_REDIS_PASS":"","DEPLOY_ENV":"production","SUBDOMAIN":"mycompany-myapp","NODE_ENV":"production","MYAPP_REDIS_HOST":"127.0.0.1","DEBUG":""}
-./node_modules/.bin/environmental envs/production.sh > /tmp/jitsu-env.json
+./node_modules/.bin/environmental --file=envs/production.sh --format=json > /tmp/jitsu-env.json
 jitsu --confirm env load /tmp/jitsu-env.json
 jitsu --confirm deploy
 rm /tmp/jitsu-env.json
@@ -178,11 +173,27 @@ rm /tmp/jitsu-env.json
 
 ## Exporting to Heroku
 
-@TODO
+```bash
+heroku config:set $(./node_modules/.bin/environmental --file=envs/production.sh --format=space)
+```
 
 ## Exporting to your own servers
 
-You could use rsync for this. For instance:
+To generate a single file that your server can source:
+
+```bash
+./node_modules/.bin/environmental --file=envs/production.sh --format=newline
+```
+
+Note that this is different from:
+
+```bash
+source envs/production.sh && env
+```
+
+As the output is cleansed from any environment variable that was not declared in `env/production.sh` or one of it's ancestors.
+
+You could use this list to inject into a process up (re)starts, or save as a file and use e.g. rsync to distribute it:
 
 ```bash
 for host in `echo ${MYAPP_SSH_HOSTS}`; do
@@ -228,8 +239,8 @@ end script
 
 ## Todo
 
- - [ ] Better (more compact, more consise) API language
  - [ ] Offer better ideas / docs for syncing config without Git
  - [ ] A means of requiring vars for particular environments, and failing hard/early
- - [ ] More tests
- - [ ] Integrate with Heroku as an export target
+ - [x] Better (more compact, more consise) API language
+ - [x] More tests
+ - [x] Integrate with Heroku as an export target
