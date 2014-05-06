@@ -20,6 +20,14 @@ describe "Environmental", ->
       expect(config).to.have.ownProperty('home');
       done()
 
+    it "should allow to disable filtering via false", (done) ->
+      config = Environmental.config
+        parent:
+          child: "1"
+      , false
+      expect(config).to.have.ownProperty('parent');
+      done()
+
     it "should support the convenience shortcut", (done) ->
       config = (require "../src/environmental").config
         "PARENT_CHILD": "1"

@@ -14,13 +14,14 @@ class Environmental
   @config: (flat, filter) ->
     flat   ?= process.env
     filter ?= process.env.NODE_APP_PREFIX
+    filter ?= false
 
     lowerEnv = {}
     for key, val of flat
       lowerEnv[key.toLowerCase()] = val
     nested = unflatten lowerEnv, delimiter: "_"
 
-    if filter
+    if filter isnt false
       return nested[filter.toLowerCase()]
 
     return nested

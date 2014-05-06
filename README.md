@@ -77,7 +77,7 @@ Then when you extend this and only override `MYSQL_HOST`, obviously the `MYSQL_U
 
 ### Mandatory and unprefixed variables
 
-These variables are mandatory and have special meaning:
+These variables are mandatory and have special meaning. There is no syntactic sugar for them, you are to access them via `process.env.<var>`:
 
 ```bash
 export NODE_APP_PREFIX="MYAPP" # filter and nest vars starting with MYAPP right into your app
