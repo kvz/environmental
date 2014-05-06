@@ -153,6 +153,13 @@ console.log(config);
 //   { redis: { host: '127.0.0.1' } }
 ```
 
+Or in coffeescript if that's your cup of tea:
+
+```coffeescript
+config      = require("environmental").config()
+redisClient = redis.createClient(config.redis.port, config.redis.host)
+```
+
 As you see
 
  - any underscore `_` in env var names signifies a new nesting level of configuration
@@ -193,7 +200,7 @@ source envs/production.sh && env
 
 As the output is cleansed from any environment variable that was not declared in `env/production.sh` or one of it's ancestors.
 
-You could use this list to inject into a process up (re)starts, or save as a file and use e.g. rsync to distribute it:
+You could use this list to inject into a process upon (re)starts, or save as a file so upstart can inject it into a non-privileged process, and use e.g. rsync to distribute it amongst privileged users:
 
 ```bash
 for host in `echo ${MYAPP_SSH_HOSTS}`; do
