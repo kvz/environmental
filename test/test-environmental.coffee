@@ -16,8 +16,6 @@ describe "Environmental", ->
       done()
 
     it "should default to process.env and be able to find the HOME env var", (done) ->
-      console.log
-        processEnv: process.env
       config = Environmental.config()
       expect(config).to.have.ownProperty('home');
       done()

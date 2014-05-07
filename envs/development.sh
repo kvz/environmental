@@ -1,5 +1,5 @@
 __DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source ${__DIR}/_default.sh
+. ${__DIR}/_default.sh
 # Based on _default ---^
 
 export DEPLOY_ENV="$(basename "${BASH_SOURCE[0]}" .sh)"
