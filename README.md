@@ -7,20 +7,18 @@
 [![Development Dependency Status](https://david-dm.org/kvz/environmental/dev-status.png?theme=shields.io)](https://david-dm.org/kvz/environmental#info=devDependencies)
 <!-- /badges -->
 
-Some people think shipping json / yml / xml config files is an upgrade over archaic environment variables. It's not.
-
-> Don't let your app load its config
+Some people think shipping .json / .yml / .xml config files is an upgrade over using archaic environment variables. 
 
 ![687474703a2f2f6769666174726f6e2e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031332f30322f6974735f615f747261702e676966](https://cloud.githubusercontent.com/assets/26752/2877380/764960a4-d44a-11e3-8ac4-afd5f1678bb2.gif)
 
-... inject it instead.
+They're wrong. Don't let your app load its config, inject it instead.
 
-Unix environment vars are ideal for configuration and I have yet to encounter an application that woudn't be better off with them.
+Unix environment vars are ideal for configuration and I have yet to encounter an application that wouldn't be better off with them. Why?
 
 - You can override a value at near-runtime without having to change/backup config files: `DEBUG=*.* node run.js`
 - You can inject environment variables into the memory of a process belonging to a non-privileged user: `source envs/production.sh && sudo -EHu www-data node run.js` without having to run / write any software for it.
-- You can inherit, inside `staging.sh`, just `. production.sh`, inside `kevin.sh` `. development.sh`
-- Your operating system is aware and provides tools for inspection, debugging, optionally passing onto other processes, etc.
+- You can inherit. Inside `staging.sh`, just `source production.sh`, inside `kevin.sh` `source development.sh`
+- Your operating system is aware and provides tools to inspect, debug, optionally pass on to other processes, etc.
 - You can directly use config across languages, e.g. in supporting BASH scripts
 - You can directly use the config in a terminal yourself, e.g. `cd ${MYAPP_DIR}`
 
@@ -28,7 +26,7 @@ And as with any other type of config:
 
 - You can group/save them into files and keep them out of version control
 
-One downside of environment variables is that there is little convention and syntactic sugar in the high-level languages. This module attempts to change that.
+One downside of environment variables is that there is little convention and syntactic sugar in the high-level languages. It doesn't feel atomic and you think it's more likely to let you down. This module attempts to change that.
 
 Environmental doesn't:
 
@@ -39,7 +37,7 @@ Environmental does:
 
  - Impose **one way** of dealing with environment variables
  - Make vars available in nested format inside your app (e.g. `MYAPP_REDIS_HOST`) becomes `config.redis.host`
- - Play well with unix
+ - <3 unix
  - Interpret multiple inherited bash environment files in an isolated environment to capture them, and prepare them for exporting to [Nodejitsu](https://www.nodejitsu.com/documentation/jitsu/env/) or [Heroku](https://devcenter.heroku.com/articles/config-vars).
 
 ## Conventions
