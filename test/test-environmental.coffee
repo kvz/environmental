@@ -46,6 +46,7 @@ describe "Environmental", ->
           "_"
         ]
       capture = env.capture "#{__dirname}/../envs/production.sh", (err, flat) ->
+        expect(err).to.be.null
         expect(flat).to.deep.equal
           DEBUG           : ""
           DEPLOY_ENV      : "production"
@@ -59,6 +60,7 @@ describe "Environmental", ->
     it "should be able handle travis environment", (done) ->
       env = new Environmental
       capture = env.capture "#{__dirname}/../envs/travis.sh", (err, flat) ->
+        expect(err).to.be.null
         config = Environmental.config flat
         expect(config.travis).to.deep.equal
           branch: "master"
