@@ -36,13 +36,14 @@ class Environmental
 
     cmd = exec "source #{file} && env", options, (err, stdout, stderr) =>
       if err
-        return cb ("Error while running #{file}. #{err}. #{stderr}")
+        return cb "Error while running #{file}. #{err}. #{stderr}"
 
-      for item in stdout.split("\n")
-        parts = item.split("=")
+      for item in stdout.split "\n"
+        parts = item.split "="
         key   = parts.shift()
-        val   = parts.join("=")
-        continue  if @config.ignore.indexOf(key) isnt -1 or not key
+        val   = parts.join "="
+        if @config.ignore.indexOf(key) isnt -1 or not key
+          continue
         flat[key] = val
 
       cb null, flat
