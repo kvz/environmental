@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 __DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-. ${__DIR}/_default.sh
+source ${__DIR}/_default.sh
 # Based on _default ---^
 
 export DEPLOY_ENV="$(basename "${BASH_SOURCE[0]}" .sh)"

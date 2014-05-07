@@ -18,7 +18,7 @@ Some people think shipping json / yml / xml config files is an upgrade over arch
 Unix environment vars are ideal for configuration and I have yet to encounter an application that woudn't be better off with them.
 
 - You can override a value at near-runtime without having to change/backup config files: `DEBUG=*.* node run.js`
-- You can inject environment variables into the memory of a process belonging to a non-privileged user: `. envs/production.sh && sudo -EHu www-data node run.js` without having to run / write any software for it.
+- You can inject environment variables into the memory of a process belonging to a non-privileged user: `source envs/production.sh && sudo -EHu www-data node run.js` without having to run / write any software for it.
 - You can inherit, inside `staging.sh`, just `. production.sh`, inside `kevin.sh` `. development.sh`
 - Your operating system is aware and provides tools for inspection, debugging, optionally passing onto other processes, etc.
 - You can directly use config across languages, e.g. in supporting BASH scripts
@@ -128,23 +128,23 @@ Having env files in Git can be convenient as you're still protoyping, but once y
 Start your app in any of these ways:
 
 ```bash
-. envs/development.sh
+source envs/development.sh
 node myapp.js
 ```
 
 ```bash
-. envs/production.sh
+source envs/production.sh
 DEBUG=*.* node myapp.js
 ```
 
 ```bash
-. envs/staging.sh
+source envs/staging.sh
 # Following seems weird, but sudo will not preserve $PATH, regardless of -E
 sudo -EHu www-data env PATH=${PATH} node myapp.js
 ```
 
 ```bash
-. envs/development.sh && node myapp.js
+source envs/development.sh && node myapp.js
 ```
 
 ```bash
@@ -204,7 +204,7 @@ To generate a single file that your server can source:
 Note that this is different from:
 
 ```bash
-. envs/production.sh && env
+source envs/production.sh && env
 ```
 
 As the output is cleansed from any environment variable that was not declared in `env/production.sh` or one of it's ancestors.
@@ -248,7 +248,7 @@ script
   exec bash -c "cd /srv/myapp/current \
     && chown root envs/*.sh \
     && chmod 600 envs/*.sh \
-    && . envs/production.sh \
+    && source envs/production.sh \
     && exec sudo -EHu www-data make start 2>&1"
 end script
 ```

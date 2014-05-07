@@ -20,7 +20,10 @@ class Environmental
     lowerEnv = {}
     for key, val of flat
       lowerEnv[key.toLowerCase()] = val
-    nested = unflatten lowerEnv, delimiter: "_"
+
+    nested = unflatten lowerEnv,
+      object   : true
+      delimiter: "_"
 
     if filter isnt false
       return nested[filter.toLowerCase()]
@@ -35,7 +38,7 @@ class Environmental
       env:
         {}
 
-    cmd = exec ". #{file} && env", options, (err, stdout, stderr) =>
+    cmd = exec "bash -c 'source #{file} && env'", options, (err, stdout, stderr) =>
       if err
         return cb "Error while running #{file}. #{err}. #{stderr}"
 
