@@ -8,7 +8,8 @@ lint:
 	@[ ! -f coffeelint.json ] && $(COFFEELINT) --makeconfig > coffeelint.json || true
 	$(COFFEELINT) --file ./coffeelint.json src
 
-build: lint
+build:
+	make lint || true
 	$(COFFEE) $(CSOPTS) -c -o lib src/environmental.coffee
 
 test: build

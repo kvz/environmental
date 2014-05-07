@@ -21,15 +21,9 @@ class Environmental
     for key, val of flat
       lowerEnv[key.toLowerCase()] = val
 
-    try
-      nested = unflatten lowerEnv,
-        object   : true
-        delimiter: "_"
-    catch e
-      console.log
-        error   : "Could not unflatten this object"
-        lowerEnv: lowerEnv
-      throw e
+    nested = unflatten lowerEnv,
+      object   : true
+      delimiter: "_"
 
     if filter isnt false
       return nested[filter.toLowerCase()]

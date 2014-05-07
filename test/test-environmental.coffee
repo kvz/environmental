@@ -33,7 +33,18 @@ describe "Environmental", ->
         "PARENT_CHILD": "1"
       expect(config).to.deep.equal
         parent:
-          child: "1",
+          child: "1"
+      done()
+
+    it "should be able handle travis environment", (done) ->
+      config = (require "../src/environmental").config
+        travis          : "true",
+        travis_build_dir: "/home/travis/build/kvz/environmental",
+
+      expect(config).to.deep.equal
+        travis:
+          build:
+            dir: "/home/travis/build/kvz/environmental"
       done()
 
   describe "capture", ->
@@ -55,32 +66,4 @@ describe "Environmental", ->
           NODE_APP_PREFIX : "MYAPP"
           NODE_ENV        : "production"
           SUBDOMAIN       : "mycompany-myapp"
-        done()
-
-    it "should be able handle travis environment", (done) ->
-      env = new Environmental
-      capture = env.capture "#{__dirname}/../envs/travis.sh", (err, flat) ->
-        expect(err).to.be.null
-        config = Environmental.config flat
-        expect(config.travis).to.deep.equal
-          branch: "master"
-          build:
-            dir: "/home/travis/build/kvz/environmental"
-            id: "24617273"
-            number: "5"
-          commit:
-            range: "6201804dff8e...5b12f36fd4f7"
-          job:
-            id: "24617274"
-            number: "5.1"
-          node:
-            version: "0.10"
-          pull:
-            request: "false"
-          repo:
-            slug: "kvz/environmental"
-          secure:
-            env:
-              vars: "false"
-
         done()
