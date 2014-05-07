@@ -34,7 +34,7 @@ class Environmental
       env:
         {}
 
-    cmd = exec "source #{file} && env", options, (err, stdout, stderr) =>
+    cmd = exec ". #{file} && env", options, (err, stdout, stderr) =>
       if err
         return cb "Error while running #{file}. #{err}. #{stderr}"
 
