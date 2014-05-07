@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Environment tree:
 #
 #   _default.sh

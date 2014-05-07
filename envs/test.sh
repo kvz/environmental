@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 __DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . ${__DIR}/development.sh
 # Based on development ---^

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 export TRAVIS_REPO_SLUG="kvz/environmental"
 export HAS_ANTARES_THREE_LITTLE_FRONZIES_BADGE="true"
 export TRAVIS_PULL_REQUEST="false"
