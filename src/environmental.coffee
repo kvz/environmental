@@ -5,6 +5,7 @@ unflatten = require('flat').unflatten
 
 class Environmental
   constructor: (@config) ->
+    @config ?= {}
     @config.ignore ?= [
       "PWD"
       "SHLVL"

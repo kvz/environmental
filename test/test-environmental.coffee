@@ -55,3 +55,30 @@ describe "Environmental", ->
           NODE_ENV        : "production"
           SUBDOMAIN       : "mycompany-myapp"
         done()
+
+    it "should be able handle travis environment", (done) ->
+      env = new Environmental
+      capture = env.capture "#{__dirname}/../envs/travis.sh", (err, flat) ->
+        config = Environmental.config flat
+        expect(config.travis).to.deep.equal
+          branch: "master"
+          build:
+            dir: "/home/travis/build/kvz/environmental"
+            id: "24617273"
+            number: "5"
+          commit:
+            range: "6201804dff8e...5b12f36fd4f7"
+          job:
+            id: "24617274"
+            number: "5.1"
+          node:
+            version: "0.10"
+          pull:
+            request: "false"
+          repo:
+            slug: "kvz/environmental"
+          secure:
+            env:
+              vars: "false"
+
+        done()
