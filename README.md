@@ -73,6 +73,30 @@ so you can easily compare side by side.
 Then just use `_default.sh`, `test.sh`, `staging.sh` for tweaks, to keep things
 clear.
 
+### Inject features
+
+Instead of having your code make decisions based on environment:
+
+```coffeescript
+if process.env.NODE_ENV == "production"
+  # Install cronjobs
+```
+
+Keep that responsibility with your environment files:
+
+```bash
+$ cat envs/_default_.sh
+TLS_CRONJOBS_INSTALL="0"
+
+$ cat envs/production.sh
+TLS_CRONJOBS_INSTALL="1"
+```
+
+```coffeescript
+if config.cronjobs.install == "1"
+  # Install cronjobs
+```
+
 ### Inheritance can be a bitch
 
 One common pitfall is re-use of variables:
@@ -82,7 +106,7 @@ export MYSQL_HOST="127.0.0.1"
 export MYSQL_URL="mysql://user:pass@${MYSQL_HOST}/dbname"
 ```
 
-Then when you extend this and only override `MYSQL_HOST`, obviously the `MYSQL_URL` will remain unaware of your host change. Ergo: duplication of vars might be the lesser evil than going out of your way to DRY things up.
+Then when you extend this and only override `MYSQL_HOST`, obviously the `MYSQL_URL` will remain unaware of your host change. Ergo: duplication of vars might be the lesser evil here compared to going out of your way to DRY things up.
 
 ### Mandatory and unprefixed variables
 
