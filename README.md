@@ -7,7 +7,7 @@
 [![Development Dependency Status](https://david-dm.org/kvz/environmental/dev-status.png?theme=shields.io)](https://david-dm.org/kvz/environmental#info=devDependencies)
 <!-- /badges -->
 
-Some people think shipping .json / .yml / .xml config files is an upgrade over using archaic environment variables. 
+Some people think shipping .json / .yml / .xml config files is an upgrade over archaic environment variables. 
 
 ![687474703a2f2f6769666174726f6e2e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031332f30322f6974735f615f747261702e676966](https://cloud.githubusercontent.com/assets/26752/2877380/764960a4-d44a-11e3-8ac4-afd5f1678bb2.gif)
 
