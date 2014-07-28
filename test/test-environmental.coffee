@@ -67,3 +67,18 @@ describe "Environmental", ->
           NODE_ENV        : "production"
           SUBDOMAIN       : "mycompany-myapp"
         done()
+
+    it "should capture environemtn without defining an ignore", (done) ->
+      env = new Environmental
+      capture = env.capture "#{__dirname}/../envs/production.sh", (err, flat) ->
+        expect(err).to.be.null
+        expect(flat).to.deep.equal
+          DEBUG           : ""
+          DEPLOY_ENV      : "production"
+          MYAPP_REDIS_HOST: "127.0.0.1"
+          MYAPP_REDIS_PORT: "6379"
+          MYAPP_REDIS_PASS: ""
+          NODE_APP_PREFIX : "MYAPP"
+          NODE_ENV        : "production"
+          SUBDOMAIN       : "mycompany-myapp"
+        done()
