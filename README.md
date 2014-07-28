@@ -196,6 +196,9 @@ As you see
  - any underscore `_` in env var names signifies a new nesting level of configuration
  - all remaining keys are lowercased
 
+`config` takes two arguments: `flat` defaulting to `process.env`, and `filter`, defaulting to `process.env.NODE_APP_PREFIX`. Changing these allow you to inject or reload environment variables.
+
+
 ## Exporting to Nodejitsu
 
 Nodejitsu als works with environment variables. But since they are hard to ship, they want you to bundle them in a json file.

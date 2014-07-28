@@ -4,9 +4,10 @@ exec      = require("child_process").exec
 unflatten = require('flat').unflatten
 
 class Environmental
-  constructor: (@config) ->
-    @config ?= {}
-    @config.ignore ?= [
+  constructor: ({
+    @ignore
+  } = {}) ->
+    @ignore ?= [
       "PWD"
       "SHLVL"
       "_"
@@ -47,7 +48,7 @@ class Environmental
         parts = item.split "="
         key   = parts.shift()
         val   = parts.join "="
-        if not key or key in @config.ignore
+        if not key or key in @ignore
           continue
         flat[key] = val
 
