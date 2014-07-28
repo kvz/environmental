@@ -48,7 +48,11 @@ class Environmental
         parts = item.split "="
         key   = parts.shift()
         val   = parts.join "="
-        if not key or key in @ignore
+        if not key
+          continue
+        if not key in @ignore
+          continue
+        if key in @ignore
           continue
         flat[key] = val
 
