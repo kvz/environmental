@@ -22,6 +22,7 @@ class Environmental
       lowerEnv[key.toLowerCase()] = val
 
     nested = unflatten lowerEnv,
+      overwrite: true
       object   : true
       delimiter: "_"
 
