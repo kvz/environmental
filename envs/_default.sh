@@ -5,7 +5,7 @@
 #   ├── development.sh
 #   │   └── test.sh
 #   └── production.sh
-#       └── staging.sh.sh
+#       └── staging.sh
 #
 # This provides DRY flexibilty, but in practice I recommend using mainly
 # development.sh and production.sh, and duplication keys between them
