@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-__DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source ${__DIR}/production.sh
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source ${__dir}/production.sh
 # Based on production ---^
 
 export DEPLOY_ENV="$(basename "${BASH_SOURCE[0]}" .sh)"
