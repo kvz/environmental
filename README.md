@@ -1,5 +1,3 @@
-# environmental
-
 <!-- badges/ -->
 [![Build Status](https://secure.travis-ci.org/kvz/environmental.png?branch=master)](http://travis-ci.org/kvz/environmental "Check this project's build status on TravisCI")
 [![NPM version](http://badge.fury.io/js/environmental.png)](https://npmjs.org/package/environmental "View this project on NPM")
@@ -7,11 +5,11 @@
 [![Development Dependency Status](https://david-dm.org/kvz/environmental/dev-status.png?theme=shields.io)](https://david-dm.org/kvz/environmental#info=devDependencies)
 <!-- /badges -->
 
-Some people think shipping .json / .yml / .xml config files is an upgrade over using archaic environment variables.
+Some people feel that shipping `.json` / `.yml` / `.xml` config files is an upgrade over using archaic environment variables.
 
 ![687474703a2f2f6769666174726f6e2e636f6d2f77702d636f6e74656e742f75706c6f6164732f323031332f30322f6974735f615f747261702e676966](https://cloud.githubusercontent.com/assets/26752/2877380/764960a4-d44a-11e3-8ac4-afd5f1678bb2.gif)
 
-They're wrong. Don't let your app load its config, inject it instead.
+Don't let your app load its config, inject it instead.
 
 Unix environment vars are ideal for configuration and I have yet to encounter an application that wouldn't be better off with them. Why?
 
@@ -69,7 +67,18 @@ You could make this super-[DRY](https://en.wikipedia.org/wiki/Don't_repeat_yours
 `development.sh` and `production.sh`, and duplicate keys between them
 so you can easily compare side by side.
 Then just use `_default.sh`, `test.sh`, `staging.sh` for tweaks, to keep things
-clear.
+clear. Read 'Inheritance can be a bitch' to see why.
+
+### Inheritance can be a bitch
+
+One common pitfall is re-use of variables:
+
+```bash
+export MYSQL_HOST="127.0.0.1"
+export MYSQL_URL="mysql://user:pass@${MYSQL_HOST}/dbname"
+```
+
+Then when you extend this and only override `MYSQL_HOST`, obviously the `MYSQL_URL` will remain unaware of your host change. Ergo: duplication of vars might be the lesser evil here compared to going out of your way to DRY things up.
 
 ### Inject features
 
@@ -94,17 +103,6 @@ TLS_CRONJOBS_INSTALL="1"
 if config.cronjobs.install == "1"
   # Install cronjobs
 ```
-
-### Inheritance can be a bitch
-
-One common pitfall is re-use of variables:
-
-```bash
-export MYSQL_HOST="127.0.0.1"
-export MYSQL_URL="mysql://user:pass@${MYSQL_HOST}/dbname"
-```
-
-Then when you extend this and only override `MYSQL_HOST`, obviously the `MYSQL_URL` will remain unaware of your host change. Ergo: duplication of vars might be the lesser evil here compared to going out of your way to DRY things up.
 
 ### Mandatory and unprefixed variables
 
@@ -143,7 +141,7 @@ cp -Ra node_modules/environmental/envs ./envs
 ```
 
 Add `envs/*.sh` to your project's `.gitignore` file so they are not accidentally committed into your repository.  
-Having env files in Git can be convenient as you're still protoyping, but once you go live you'll want to change all credentails and sync your env files separate from your code.
+Having env files in Git can be convenient as you're still protoyping, but once you go live you'll want to change all credentials and sync your env files separately from your code.
 
 ## Accessing config inside your app
 
@@ -198,12 +196,32 @@ As you see
 
 `config` takes two arguments: `flat` defaulting to `process.env`, and `filter`, defaulting to `process.env.NODE_APP_PREFIX`. Changing these allow you to inject or reload environment variables.
 
+## Capturing a specific config file
+
+By default, environmental code will capture environment variables of the current process. However, you can also use it to capture variables in isolation as produced by a gives shell file (works with inherits too).
+
+```coffeescript
+env = new Environmental
+env.capture "#{__dirname}/envs/production.sh", (err, flat) ->
+  expect(err).to.be.null
+  expect(flat.MYAPP_REDIS_HOST, "127.0.0.1")
+```
+
+Notice in does not nest the configuration. You can do that by using the `config` method and passing it flat environment vars:
+
+```coffeescript
+config = Environmental.config flat, "MYAPP"
+
+expect(config).to.deep.equal
+  redis:
+    host: "127.0.0.1"
+```
 
 ## Exporting to Nodejitsu
 
-Nodejitsu als works with environment variables. But since they are hard to ship, they want you to bundle them in a json file.
+Nodejitsu also works with environment variables. But since those are hard to ship, they want you to bundle them in a json file.
 
-Environmental can create such a temporary json file for you. In this example it figures out all vars from `envs/production.sh` (even if it inherits from other files):
+Environmental can create such a temporary json file for you from the command-line. In this example it figures out all vars from `envs/production.sh` (even if it inherits from other files):
 
 ```bash
 ./node_modules/.bin/environmental --file=envs/production.sh --format=json > /tmp/jitsu-env.json
