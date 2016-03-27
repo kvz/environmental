@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "flat": "git://github.com/kvz/flat.git#3e6ad9e6ab5c9a46e4a33d5371916acb41dbc824",
-    "chai": "1.9.1",
+    "chai": "3.4.1",
     "coffee-script": "1.10.0",
     "coffeelint": "1.13.0",
     "mocha": "1.18.2",
