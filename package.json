@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "cli": "1.0.1",
-    "flat": "2.0.1"
+    "flat": "2.0.1",
+    "npm-run-all": "^4.0.1"
   },
   "keywords": [
     "environment",
