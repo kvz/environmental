@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const cli           = require('cli').enable('status', 'help', 'version', 'glob', 'timeout')
-const Environmental = require('../lib/environmental')
+const Environmental = require('./environmental')
 
 cli.parse({
   'file'  : [false,  'Environment file to capture e.g. envs/production.sh', 'file'],

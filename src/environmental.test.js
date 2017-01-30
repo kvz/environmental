@@ -1,6 +1,6 @@
 const should        = require('chai').should()
 const { expect }    = require('chai')
-const Environmental = require('../src/environmental')
+const Environmental = require('./environmental')
 
 describe('Environmental', () => {
   describe('config', () => {
