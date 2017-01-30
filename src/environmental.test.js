@@ -4,9 +4,9 @@ const Environmental = require('./environmental')
 describe('Environmental', () => {
   describe('config', () => {
     it('should be config and lowercases', done => {
-      const config = Environmental.config(
-        {MYAPP_REDIS_HOST: '127.0.0.1'}
-      , 'MYAPP')
+      const config = Environmental.config({
+        MYAPP_REDIS_HOST: '127.0.0.1',
+      }, 'MYAPP')
 
       expect(config).to.deep.equal({
         redis: {
@@ -27,15 +27,15 @@ describe('Environmental', () => {
         parent: {
           child: '1',
         },
-      }
-      , false)
+      }, false)
       expect(config).to.have.ownProperty('parent')
       return done()
     })
 
     it('should support the convenience shortcut', done => {
-      const config = (require('../src/environmental')).config({
-        'PARENT_CHILD': '1'})
+      const config = (require('./environmental')).config({
+        'PARENT_CHILD': '1',
+      })
       expect(config).to.deep.equal({
         parent: {
           child: '1',
@@ -45,11 +45,10 @@ describe('Environmental', () => {
     })
 
     return it('should be able handle travis environment', done => {
-      const config = (require('../src/environmental')).config({
+      const config = (require('./environmental')).config({
         travis          : 'true',
         travis_build_dir: '/home/travis/build/kvz/environmental',
-      }
-      )
+      })
 
       expect(config).to.deep.equal({
         travis: {
@@ -70,7 +69,8 @@ describe('Environmental', () => {
           'PWD',
           'SHLVL',
           '_',
-        ]})
+        ],
+      })
       env.capture(`${__dirname}/../envs/production.sh`, (err, flat) => {
         expect(err).to.be.null
         expect(flat).to.deep.equal({
