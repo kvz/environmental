@@ -1,1 +1,1 @@
-exports = module.exports = require('./lib/environmental');
+exports = module.exports = require('./lib/environmental')

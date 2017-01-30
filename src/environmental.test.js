@@ -1,4 +1,3 @@
-const should        = require('chai').should()
 const { expect }    = require('chai')
 const Environmental = require('./environmental')
 

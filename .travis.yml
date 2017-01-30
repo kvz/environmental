@@ -6,6 +6,5 @@ node_js:
 allow_failures:
 - node_js: "0.12"
 - node_js: "0.10"
-before_install:
- - npm install -g npm@1.4
-script: make test REPORTER=spec
+before_script:
+- if [ "${TRAVIS_NODE_VERSION}" = "6" ]; then npm run lint; fi
