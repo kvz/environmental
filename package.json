@@ -11,6 +11,7 @@
     "lib",
     "envs"
   ],
+  "main": "lib/environmental",
   "dependencies": {
     "cli": "1.0.1",
     "flat": "2.0.1"
