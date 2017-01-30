@@ -24,8 +24,4 @@ build/Release
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules
 
-lib/cli.js.map
-
-lib/environmental.js
-
-lib/environmental.js.map
+lib/*
