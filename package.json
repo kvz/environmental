@@ -1,6 +1,6 @@
 {
   "name": "environmental",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Provides conventions and code to deal with unix environment vars in a pleasant way",
   "homepage": "https://github.com/kvz/environmental",
   "author": "Kevin van Zonneveld <kevin@vanzonneveld.net>",
