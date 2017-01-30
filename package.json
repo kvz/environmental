@@ -8,12 +8,8 @@
     "node": ">= 0.8.0"
   },
   "dependencies": {
-    "chai": "4.0.0-canary.1",
     "cli": "1.0.1",
-    "coffee-script": "1.12.3",
-    "coffeelint": "1.16.0",
-    "flat": "2.0.1",
-    "mocha": "3.2.0"
+    "flat": "2.0.1"
   },
   "keywords": [
     "environment",
@@ -25,7 +21,7 @@
     "heroku"
   ],
   "bin": {
-    "environmental": "./bin/environmental"
+    "environmental": "lib/cli.js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +34,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "next-update": "^1.5.1"
+    "next-update": "^1.5.1",
+    "chai": "4.0.0-canary.1",
+    "coffee-script": "1.12.3",
+    "coffeelint": "1.16.0",
+    "mocha": "3.2.0"
   }
 }

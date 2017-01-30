@@ -15,6 +15,9 @@ build:
 test: build
 	$(MOCHA) --reporter $(REPORTER) test/
 
+test-acceptance: build
+	 node lib/cli.js --file=envs/production.sh --format=json
+
 compile:
 	@echo "Compiling files"
 	time make build
