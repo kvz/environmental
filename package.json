@@ -1,16 +1,19 @@
 {
   "name": "environmental",
-  "version": "1.4.0",
+  "version": "1.2.1",
   "description": "Provides conventions and code to deal with unix environment vars in a pleasant way",
   "homepage": "https://github.com/kvz/environmental",
   "author": "Kevin van Zonneveld <kevin@vanzonneveld.net>",
   "engines": {
     "node": ">= 0.8.0"
   },
+  "files": [
+    "lib",
+    "envs"
+  ],
   "dependencies": {
     "cli": "1.0.1",
-    "flat": "2.0.1",
-    "npm-run-all": "^4.0.1"
+    "flat": "2.0.1"
   },
   "keywords": [
     "environment",
@@ -30,7 +33,7 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "npm run build && mocha test/",
+    "test": "npm run build && mocha lib/*.test.js",
     "test:acceptance": "npm run build && node lib/cli.js --file=envs/production.sh --format=json",
     "upgrade:modules": "next-update --keep true --tldr",
     "lint": "eslint .",
