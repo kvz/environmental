@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('babel-polyfill')
 const cli           = require('cli').enable('status', 'help', 'version', 'glob', 'timeout')
 const Environmental = require('./environmental')
 

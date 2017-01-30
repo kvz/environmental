@@ -1,12 +1,10 @@
-#!/usr/bin/env bash
 // Environmental. Copyright (c) 2014, Kevin van Zonneveld (kvz.io)
+require('babel-polyfill')
 const { exec }      = require('child_process')
 const { unflatten } = require('flat')
 
 class Environmental {
-  constructor ({
-    ignore,
-  } = {}) {
+  constructor ({ ignore } = {}) {
     this.ignore = ignore
     if (this.ignore == null) {
       this.ignore = [
@@ -18,7 +16,7 @@ class Environmental {
   }
 
   static config (flat, filter) {
-    if (flat == null) {   flat = process.env }
+    if (flat == null) { flat = process.env }
     if (filter == null) { filter = process.env.NODE_APP_PREFIX }
     if (filter == null) { filter = false }
 
